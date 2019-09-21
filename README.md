@@ -1,5 +1,7 @@
 ## Zoneminder Docker
-(Current version: 1.32)
+Current version: 
+* zone minder: 1.33
+* zmeventnotification server: 4.2.5
 
 ### About
 A fork from dlandon/zoneminder.
