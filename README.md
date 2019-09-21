@@ -3,7 +3,10 @@
 
 ### About
 A fork from dlandon/zoneminder.
-Dockerfile changed to specify the zoneminder version at build time.
+
+Changes:
+* zoneminder version is chosen at build time via ARG
+* zmeventnotification files are downloaded from the git repo at build time 
 
 ### Build
 `./build.sh docker_ip zm_version`
