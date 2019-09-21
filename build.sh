@@ -38,7 +38,7 @@ read -p "which tag? [$default_tag]: " tag
 tag=${tag:-$default_tag}
 
 echo building image "$repo/$image:$tag"...
-#docker -H $1 build --no-cache -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
+docker -H $1 build --no-cache -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
 
 echo removing garbage...
 if [ -d "./zmeventnotification" ]; then rm -Rf ./zmeventnotification; fi
