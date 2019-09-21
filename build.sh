@@ -1,11 +1,13 @@
-#usage:
-#./build.sh docker_ip image_name zm_version
-#   docker_ip: ip of docker host (127.0.0.1 or others)
-#   zm_version: 1.30, 1.32, master
-#
-#example:
-#   ./build.sh 192.168.2.96 master
-
+echo ------------------------------------------------------
+echo USAGE:
+echo ./build.sh docker_ip image_name zm_version
+echo    -docker_ip: ip of docker host [127.0.0.1 or others]
+echo    -zm_version: 1.30, 1.32, master
+echo
+echo example:
+echo    ./build.sh 192.168.2.96 master
+echo ------------------------------------------------------
+echo
 default_repo="arturol76"
 default_image="zoneminder"
 default_tag="latest"
@@ -39,6 +41,7 @@ tag=${tag:-$default_tag}
 
 echo building image "$repo/$image:$tag"...
 docker -H $1 build --no-cache -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
+#docker -H $1 build -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
 
 echo removing garbage...
 if [ -d "./zmeventnotification" ]; then rm -Rf ./zmeventnotification; fi

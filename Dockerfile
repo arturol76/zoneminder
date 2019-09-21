@@ -80,6 +80,15 @@ RUN	systemd-tmpfiles --create zoneminder.conf && \
 	echo "#!/bin/sh\n\n/usr/bin/zmaudit.pl -f" >> /etc/cron.weekly/zmaudit && \
 	chmod +x /etc/cron.weekly/zmaudit
 
+#ART: nano editor
+RUN apt-get -y install nano
+
+#ART: ssh
+RUN apt-get install -y openssh-server \
+    && echo "root:root" | chpasswd \
+    && sed -i '/#/!s/\(PermitRootLogin[[:space:]]*\)\(.*\)/\1yes/' /etc/ssh/sshd_config \
+	&& sed -i '/#/!s/\(UsePAM[[:space:]]*\)\(.*\)/\1no/' /etc/ssh/sshd_config
+
 RUN	apt-get -y remove make && \
 	apt-get -y clean && \
 	apt-get -y autoremove && \

@@ -7,8 +7,9 @@ Current version:
 A fork from dlandon/zoneminder.
 
 Changes:
-* zoneminder version is chosen at build time via ARG
-* zmeventnotification files are downloaded from the git repo at build time 
+* zoneminder version is chosen at build time via ARG (look at build.sh)
+* zmeventnotification files are downloaded from the git repo at build time
+* ssh server at port 22 (can be enabled/disabled with env var 'SSH_SERVER', psw can be set via env var 'SSH_PSW', default is root:root)
 
 ### Build
 `./build.sh docker_ip zm_version`
