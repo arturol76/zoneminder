@@ -3,7 +3,11 @@ FROM dlandon/baseimage
 LABEL maintainer="dlandon"
 
 ENV	PHP_VERS="7.1"
-ENV	ZM_VERS="1.32"
+
+#valid values: 1.32, master
+ARG ZM_VERS="master"
+ENV	ZM_VERS="${ZM_VERS}"
+
 ENV	ZMEVENT_VERS="4.2"
 
 ENV	SHMEM="50%" \
