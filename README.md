@@ -6,12 +6,12 @@ A fork from dlandon/zoneminder.
 Dockerfile changed to specify the zoneminder version at build time.
 
 ### Build
-./build.sh docker_ip image_name zm_version
-   docker_ip: ip of docker host (127.0.0.1 or others)
-   zm_version: 1.32, master
+`./build.sh docker_ip zm_version`
+* docker_ip: ip of docker host (127.0.0.1 or others)
+* zm_version: zoneminder version. Valid values: 1.30, 1.32, master
 
 example:
-   ./build.sh 192.168.2.96 arturol76/zoneminder:1.33 master
+`./build.sh 192.168.2.96 master`
 
 ### Run
 
