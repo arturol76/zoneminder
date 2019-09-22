@@ -1,15 +1,18 @@
 ## Zoneminder Docker
 Current version: 
+* base image: phusion 0.10.2
 * zone minder: 1.33
 * zmeventnotification server: 4.2.5
+* PHP version: 7.1
 
 ### About
 A fork from dlandon/zoneminder.
 
 Changes:
+* use phusion/baseimage instead of dlandon/baseimage
 * zoneminder version is chosen at build time via ARG (look at build.sh)
 * zmeventnotification files are downloaded from the git repo at build time
-* ssh server at port 22 (can be enabled/disabled with env var 'SSH_SERVER', psw can be set via env var 'SSH_PSW', default is root:root)
+* nano editor
 
 ### Build
 `./build.sh docker_ip zm_version`

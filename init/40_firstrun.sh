@@ -343,20 +343,6 @@ fi
 echo "Starting services..."
 service mysql start
 
-if [ "$SSH_SERVER" == "1" ]; then
-	echo "Setting SSH Server psw..."
-	if [ -z "$SSH_PSW" ]; then
-		echo "root:root" | chpasswd 
-	else
-      	echo "root:$SSH_PSW" | chpasswd 
-	fi
-	
-	echo "Starting SSH Server..."
-	service ssh restart
-else
-	service ssh stop
-fi
-
 # Update the database if necessary
 zmupdate.pl -nointeractive
 zmupdate.pl -f
