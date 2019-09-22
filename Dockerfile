@@ -1,10 +1,8 @@
-#FROM phusion/baseimage:0.11
 FROM phusion/baseimage:0.10.2
 LABEL maintainer="arturol76"
 
 ENV	DEBCONF_NONINTERACTIVE_SEEN="true" \
 	DEBIAN_FRONTEND="noninteractive" \
-	DISABLE_SSH="true" \
 	HOME="/root" \
 	LC_ALL="C.UTF-8" \
 	LANG="en_US.UTF-8" \
@@ -13,6 +11,9 @@ ENV	DEBCONF_NONINTERACTIVE_SEEN="true" \
 	TERM="xterm"
 
 ENV	PHP_VERS="7.1"
+
+ARG DISABLE_SSH="true"
+ENV	DISABLE_SSH="${DISABLE_SSH}"
 
 #valid values: 1.30, 1.32, master
 ARG ZM_VERS="master"
