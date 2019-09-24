@@ -11,7 +11,6 @@ echo
 default_repo="arturol76"
 default_image="zoneminder"
 default_tag="latest"
-default_disable_ssh="true"
 
 echo
 
@@ -41,12 +40,9 @@ image=${image:-$default_image}
 read -p "which tag? [$default_tag]: " tag
 tag=${tag:-$default_tag}
 
-read -p "do you want to disable SSH? [$default_disable_ssh]: " tag
-tag=${disable_ssh:-$default_disable_ssh}
-
 echo building image "$repo/$image:$tag"...
 #docker -H $1 build --no-cache -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
-docker -H $1 build -t $repo/$image:$tag --build-arg ZM_VERS=$2 --build-arg DISABLE_SSH=$disable_ssh .
+docker -H $1 build -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
 
 echo removing garbage...
 if [ -d "./zmeventnotification" ]; then rm -Rf ./zmeventnotification; fi

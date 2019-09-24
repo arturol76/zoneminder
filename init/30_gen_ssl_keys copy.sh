@@ -4,9 +4,9 @@
 #
 
 #copies letsencrypt keys
-if [ -z "$LETSENCRYPT_DOMAIN" ]; then
+if [ ! -z "$LETSENCRYPT_DOMAIN" ]; then
 	if [[ -f /letsencrypt/live/$LETSENCRYPT_DOMAIN/chain.pem && -f /letsencrypt/live/$LETSENCRYPT_DOMAIN/privkey.pem ]]; then
-		cp /letsencrypt/live/$LETSENCRYPT_DOMAIN/chain.pem /config/keys/cert.crt
+		cp /letsencrypt/live/$LETSENCRYPT_DOMAIN/fullchain.pem /config/keys/cert.crt
 		cp /letsencrypt/live/$LETSENCRYPT_DOMAIN/privkey.pem /config/keys/cert.key
 		echo "letsencrypt keys copied"
 	else

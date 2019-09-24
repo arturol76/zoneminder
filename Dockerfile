@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.10.2
+FROM arturol76/phusion-baseimage
 LABEL maintainer="arturol76"
 
 ENV	DEBCONF_NONINTERACTIVE_SEEN="true" \
@@ -11,9 +11,6 @@ ENV	DEBCONF_NONINTERACTIVE_SEEN="true" \
 	TERM="xterm"
 
 ENV	PHP_VERS="7.1"
-
-ARG DISABLE_SSH="true"
-ENV	DISABLE_SSH="${DISABLE_SSH}"
 
 #valid values: 1.30, 1.32, master
 ARG ZM_VERS="master"
@@ -95,9 +92,6 @@ RUN	systemd-tmpfiles --create zoneminder.conf && \
 	cp -p /etc/zm/zm.conf /root/zm.conf && \
 	echo "#!/bin/sh\n\n/usr/bin/zmaudit.pl -f" >> /etc/cron.weekly/zmaudit && \
 	chmod +x /etc/cron.weekly/zmaudit
-
-#ART: nano editor
-RUN apt-get -y install nano
 
 RUN	apt-get -y remove make && \
 	apt-get -y clean && \
