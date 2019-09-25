@@ -24,13 +24,19 @@ example:
 ### Run
 Create the named volumes:
 
-`docker volume create zm_config
+```
+
+docker volume create zm_config
 docker volume create zm_data
-docker volume create zm_ssh`
+docker volume create zm_ssh
+
+```
 
 Create the container:
 
-`docker create \
+```
+
+docker create \
         --restart always \
         --privileged="true" \
         -p YOUR_HTTPS_PORT:443/tcp \
@@ -50,17 +56,26 @@ Create the container:
         -v zm_ssh:"/root/.ssh":rw \
         -v letsencrypt:"/letsencrypt":ro \
         --name zm \
-        arturol76/zoneminder`
+        arturol76/zoneminder
+
+```
 
 Copy your own config files into the zm_config volume:
 
-`docker cp ./conf/zmeventnotification/zmeventnotification.ini zm:/config/zmeventnotification.ini
+```
+
+docker cp ./conf/zmeventnotification/zmeventnotification.ini zm:/config/zmeventnotification.ini
 docker cp ./conf/zmeventnotification/objectconfig.ini zm:/config/hook/objectconfig.ini
 docker cp ./conf/known_faces/. zm:/config/hook/known_faces
-docker cp ./conf/init/. zm:/etc/my_init.d`
+docker cp ./conf/init/. zm:/etc/my_init.d
+
+```
 
 Start the container:
-`   docker start zm`
+
+```
+docker start zm
+```
 
 ### Letsencrypt
 To use the letsencrypt keys:
