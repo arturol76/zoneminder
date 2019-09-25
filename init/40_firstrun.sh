@@ -19,28 +19,6 @@ else
 	echo "File zm.conf already moved"
 fi
 
-# Handle the zmeventnotification.ini file
-if [ -f /root/zmeventnotification/zmeventnotification.ini ]; then
-	echo "Moving zmeventnotification.ini"
-	cp /root/zmeventnotification/zmeventnotification.ini /config/zmeventnotification.ini.default
-	if [ ! -f /config/zmeventnotification.ini ]; then
-		mv /root/zmeventnotification/zmeventnotification.ini /config/zmeventnotification.ini
-	else
-		rm -rf /root/zmeventnotification/zmeventnotification.ini
-	fi
-else
-	echo "File zmeventnotification.ini already moved"
-fi
-
-# Handle the zmeventnotification.pl & daemon files
-if [ -f /root/zmeventnotification/zmeventnotification.pl ]; then
-	echo "Moving the event notification server"
-	mv /root/zmeventnotification/zmeventnotification.pl /usr/bin
-	chmod +x /usr/bin/zmeventnotification.pl 2>/dev/null
-else
-	echo "Event notification server already moved"
-fi
-
 # Move ssmtp configuration if it doesn't exist
 if [ ! -d /config/ssmtp ]; then
 	echo "Moving ssmtp to config folder"
@@ -224,7 +202,7 @@ if [ -f /config/cron ]; then
 	crontab -l -u root | cat - /config/cron | crontab -u root -
 fi
 
-# Symbolink for /config/zmeventnotification.ini
+# copy /config/zmeventnotification.ini
 ln -sf /config/zmeventnotification.ini /etc/zm/zmeventnotification.ini
 chown www-data:www-data /etc/zm/zmeventnotification.ini
 
@@ -233,112 +211,21 @@ echo "Setting shared memory to : $SHMEM of `awk '/MemTotal/ {print $2}' /proc/me
 umount /dev/shm
 mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=${SHMEM} tmpfs /dev/shm
 
-# Install hook packages, if enabled
-if [ "$INSTALL_HOOK" == "1" ]; then
-	echo "Installing machine learning modules & hooks..."
-
-	if [ -f /root/zmeventnotification/setup.py ]; then
-		# If hook folder exists, copy files into image
-		if [ ! -d /config/hook ]; then
-			echo "Creating hook folder in config folder"
-			mkdir /config/hook
-		fi
-
-		# Python modules needed for hook processing
-		apt-get -y install python3-pip cmake
-
-		# pip3 will take care on installing dependent packages
-		pip3 install future
-		pip3 install /root/zmeventnotification
-	    rm -rf /root/zmeventnotification/zmes_hook_helpers
-	fi
-
-	# Download models files
-	if [ "$INSTALL_TINY_YOLO" == "1" ]; then
-		if [ ! -d /config/hook/models/tinyyolo ]; then
-			echo "Downloading tiny yolo models and configurations..."
-			mkdir -p /config/hook/models/tinyyolo
-			wget https://pjreddie.com/media/files/yolov3-tiny.weights -O /config/hook/models/tinyyolo/yolov3-tiny.weights
-			wget https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov3-tiny.cfg -O /config/hook/models/tinyyolo/yolov3-tiny.cfg
-			wget https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names -O /config/hook/models/tinyyolo/yolov3-tiny.txt
-		else
-			echo "Tiny Yolo files have already been downloaded, skipping..."
-		fi
-	fi
-
-	if [ "$INSTALL_YOLO" == "1" ]; then
-		if [ ! -d /config/hook/models/yolov3 ]; then
-			echo "Downloading yolo models and configurations..."
-			mkdir -p /config/hook/models/yolov3
-			wget https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov3.cfg -O /config/hook/models/yolov3/yolov3.cfg
-			wget https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names -O /config/hook/models/yolov3/yolov3_classes.txt
-			wget https://pjreddie.com/media/files/yolov3.weights -O /config/hook/models/yolov3/yolov3.weights
-		else
-			echo "Yolo files have already been downloaded, skipping..."
-	    fi
-	fi
-
-	# Handle the objectconfig.ini file
-	if [ -f /root/zmeventnotification/objectconfig.ini ]; then
-		echo "Moving objectconfig.ini"
-		cp /root/zmeventnotification/objectconfig.ini /config/hook/objectconfig.ini.default
-		if [ ! -f /config/hook/objectconfig.ini ]; then
-			mv /root/zmeventnotification/objectconfig.ini /config/hook/objectconfig.ini
-		else
-			rm -rf /root/zmeventnotification/objectconfig.ini
-		fi
-	else
-		echo "File objectconfig.ini already moved"
-	fi
-
-	# Handle the detect_wrapper.sh file
-	if [ -f /root/zmeventnotification/detect_wrapper.sh ]; then
-		echo "Moving detect_wrapper.sh"
-		mv /root/zmeventnotification/detect_wrapper.sh /config/hook/detect_wrapper.sh
-	else
-		echo "File detect_wrapper.sh already moved"
-	fi
-
-	# Handle the detect.py file
-	if [ -f /root/zmeventnotification/detect.py ]; then
-		echo "Moving detect.py"
-		mv /root/zmeventnotification/detect.py /config/hook/detect.py
-	else
-		echo "File detect.py already moved"
-	fi
-
-	# Symbolic link for models in /config
-	rm -rf /var/lib/zmeventnotification/models
-	ln -sf /config/hook/models /var/lib/zmeventnotification/models
-	chown -R www-data:www-data /var/lib/zmeventnotification/models
-
-	# Symbolic link for known_faces in /config
-	rm -rf /var/lib/zmeventnotification/known_faces
-	ln -sf /config/hook/known_faces /var/lib/zmeventnotification/known_faces
-	chown -R www-data:www-data /var/lib/zmeventnotification/known_faces
-
-	# Symbolic link for hook files in /config
-	ln -sf /config/hook/detect.py /usr/bin/detect.py 2>/dev/null
-	ln -sf /config/hook/detect_wrapper.sh /usr/bin/detect_wrapper.sh 2>/dev/null
-	chmod +x /usr/bin/detect* 2>/dev/null
-	ln -sf /config/hook/objectconfig.ini /etc/zm/ 2>/dev/null
-
-	if [ "$INSTALL_FACE" == "1" ] && [ -f /root/zmeventnotification/setup.py ]; then
-		# Create known_faces folder if it doesn't exist
-		if [ ! -d /config/hook/known_faces ]; then
-			echo "Creating hook/known_faces folder in config folder"
-			mkdir -p /config/hook/known_faces
-		fi
-
-		# Install for face recognition
-		apt-get -y install libopenblas-dev liblapack-dev libblas-dev
- 		pip3 install face_recognition
-	fi
-
-	rm -rf /root/zmeventnotification/setup.py
-
-	echo "Hook installation completed"
+# Handle the objectconfig.ini file
+if [ -f /config/hook/objectconfig.ini ]; then
+	cp /config/hook/objectconfig.ini /etc/zm/objectconfig.ini
+	chown -R www-data:www-data /etc/zm/objectconfig.ini
 fi
+
+if [ ! -d /config/hook/known_faces ]; then
+	echo "Creating hook/known_faces folder in config folder"
+	mkdir -p /config/hook/known_faces
+fi
+
+chown -R www-data:www-data /var/lib/zmeventnotification/models
+
+ln -sf /config/hook/known_faces /var/lib/zmeventnotification/known_faces
+chown -R www-data:www-data /var/lib/zmeventnotification/known_faces
 
 echo "Starting services..."
 service mysql start

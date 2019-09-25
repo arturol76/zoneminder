@@ -24,7 +24,6 @@ ENV	SHMEM="50%" \
 
 COPY init/ /etc/my_init.d/
 COPY defaults/ /root/
-COPY zmeventnotification /root/zmeventnotification/
 
 RUN	apt-get update \
 	&& apt-get -y upgrade -o Dpkg::Options::="--force-confold" \
@@ -51,6 +50,8 @@ RUN	rm /etc/mysql/my.cnf && \
 	a2enconf php$PHP_VERS-fpm zoneminder && \
 	echo "extension=apcu.so" > /etc/php/$PHP_VERS/mods-available/apcu.ini && \
 	echo "extension=mcrypt.so" > /etc/php/$PHP_VERS/mods-available/mcrypt.ini && \
+	perl -MCPAN -e "force install inc::latest" && \
+	perl -MCPAN -e "force install Protocol::WebSocket" && \
 	perl -MCPAN -e "force install Net::WebSocket::Server" && \
 	perl -MCPAN -e "force install LWP::Protocol::https" && \
 	perl -MCPAN -e "force install Config::IniFiles" && \
@@ -83,6 +84,15 @@ RUN	mv /root/zoneminder /etc/init.d/zoneminder && \
 	service apache2 restart && \
 	service zoneminder start
 
+# Install ZMES
+RUN apt-get install -y git python3-pip \
+	&& pip3 install future \
+	&& git clone https://github.com/pliablepixels/zmeventnotification.git /tmp/zmevent \
+	&& cd /tmp/zmevent \
+	&& ./install.sh --no-interactive --install-es --install-hook --install-config \
+	&& mkdir -p /var/lib/zmeventnotification/images \
+	&& chown -R www-data:www-data /var/lib/zmeventnotification/
+	
 RUN	systemd-tmpfiles --create zoneminder.conf && \
 	mv /root/default-ssl.conf /etc/apache2/sites-enabled/default-ssl.conf && \
 	mkdir /etc/apache2/ssl/ && \
@@ -92,6 +102,10 @@ RUN	systemd-tmpfiles --create zoneminder.conf && \
 	cp -p /etc/zm/zm.conf /root/zm.conf && \
 	echo "#!/bin/sh\n\n/usr/bin/zmaudit.pl -f" >> /etc/cron.weekly/zmaudit && \
 	chmod +x /etc/cron.weekly/zmaudit
+	
+# Install for face recognition
+RUN apt-get -y install libopenblas-dev liblapack-dev libblas-dev cmake \
+ 	&& pip3 install face_recognition
 
 RUN	apt-get -y remove make && \
 	apt-get -y clean && \

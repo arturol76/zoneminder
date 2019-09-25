@@ -9,9 +9,13 @@ Current version:
 A fork from dlandon/zoneminder with some changes:
 * use arturol76/phusion-baseimage (phusion 0.10.2 with SSH enabled) instead of dlandon/baseimage
 * zoneminder version is chosen at build time via ARG (look at build.sh)
-* zmeventnotification files are downloaded from the git repo at build time
+* zmeventnotification server (ZMES) and yolo/tiny_yolo models are installed via ZMES install.sh script and embedded into the image (for super-fast startup of container)
+* face recognition embedded into the image (for super-fast startup of container)
+* as ZMES, models and face recognition are embedded by default, env variables INSTALL_HOOK, INSTALL_FACE INSTALL_TINY_YOLO="1", INSTALL_YOLO="1" are removed
+* additional dependencies to remove some warnings
 * nano editor
 * use letsencrypt keys if env variable LETSENCRYPT_DOMAIN is set (see below)
+* apt update at container's startup can be enabled/disabled via env var APT_UPDATE
 
 ### Build
 `./build.sh docker_ip zm_version`
@@ -25,17 +29,14 @@ example:
 Create the named volumes:
 
 ```
-
 docker volume create zm_config
 docker volume create zm_data
 docker volume create zm_ssh
-
 ```
 
 Create the container:
 
 ```
-
 docker create \
         --restart always \
         --privileged="true" \
@@ -46,29 +47,23 @@ docker create \
         -e SHMEM="50%" \
         -e PUID="99" \
         -e PGID="100" \
-        -e INSTALL_HOOK="1" \
-        -e INSTALL_FACE="1" \
-        -e INSTALL_TINY_YOLO="1" \
-        -e INSTALL_YOLO="1" \
         -e LETSENCRYPT_DOMAIN="YOUR_DOMAIN" \
+        -e APT_UPDATE="1" \
         -v zm_config:"/config":rw \
         -v zm_data:"/var/cache/zoneminder":rw \
         -v zm_ssh:"/root/.ssh":rw \
         -v letsencrypt:"/letsencrypt":ro \
         --name zm \
         arturol76/zoneminder
-
 ```
 
 Copy your own config files into the zm_config volume:
 
 ```
-
-docker cp ./conf/zmeventnotification/zmeventnotification.ini zm:/config/zmeventnotification.ini
-docker cp ./conf/zmeventnotification/objectconfig.ini zm:/config/hook/objectconfig.ini
+docker cp YOUR-zmeventnotification.ini zm:/config/zmeventnotification.ini
+docker cp YOUR-objectconfig.ini zm:/config/hook/objectconfig.ini
 docker cp ./conf/known_faces/. zm:/config/hook/known_faces
 docker cp ./conf/init/. zm:/etc/my_init.d
-
 ```
 
 Start the container:

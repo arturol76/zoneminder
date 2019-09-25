@@ -3,11 +3,17 @@
 # 20_apt_update.sh
 #
 
-# Update repositories
-apt-get update
+if [ "$APT_UPDATE" == "1" ]; then
+    echo "performing updates..."
 
-# Perform Upgrade
-apt-get -y upgrade -o Dpkg::Options::="--force-confold"
+    # Update repositories
+    apt-get update
 
-# Clean + purge old/obsoleted packages
-apt-get -y autoremove
+    # Perform Upgrade
+    apt-get -y upgrade -o Dpkg::Options::="--force-confold"
+
+    # Clean + purge old/obsoleted packages
+    apt-get -y autoremove
+else
+    echo "updates disabled."
+fi

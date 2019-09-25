@@ -14,24 +14,6 @@ default_tag="latest"
 
 echo
 
-#ZmEventNotification repo
-echo cloning zmeventnotification repo...
-if [ -d "./tmp" ]; then rm -Rf ./tmp; fi
-if [ -d "./zmeventnotification" ]; then rm -Rf ./zmeventnotification; fi
-
-git clone https://github.com/pliablepixels/zmeventnotification ./tmp
-cp -r ./tmp/hook zmeventnotification
-cp ./tmp/zmeventnotification.* zmeventnotification
-cd ./zmeventnotification
-rm -r dev_notes
-rm .gitignore LICENSE MANIFEST.in requirements.txt
-cd ..
-
-if [ -d "./tmp" ]; then rm -Rf ./tmp; fi
-
-echo zmeventnotification version is:
-cat ./zmeventnotification/zmes_hook_helpers/__init__.py
-
 echo building image...
 read -p "which repo? [$default_repo]: " repo
 repo=${repo:-$default_repo}
@@ -43,9 +25,6 @@ tag=${tag:-$default_tag}
 echo building image "$repo/$image:$tag"...
 #docker -H $1 build --no-cache -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
 docker -H $1 build -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
-
-echo removing garbage...
-if [ -d "./zmeventnotification" ]; then rm -Rf ./zmeventnotification; fi
 
 read -p "Do you want to push image to docker repository? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
