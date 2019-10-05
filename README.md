@@ -2,7 +2,7 @@
 Current version: 
 * base image: phusion 0.10.2
 * zone minder: 1.33.14
-* zmeventnotification server: 4.2.5
+* zmeventnotification server: 4.4.7
 * PHP version: 7.1
 
 ### About

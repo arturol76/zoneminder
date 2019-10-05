@@ -24,7 +24,7 @@ tag=${tag:-$default_tag}
 
 echo building image "$repo/$image:$tag"...
 #docker -H $1 build --no-cache -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
-docker -H $1 build -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
+docker -H $1 build --no-cache -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
 
 read -p "Do you want to push image to docker repository? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
