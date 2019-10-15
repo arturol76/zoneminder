@@ -26,6 +26,8 @@ example:
 `./build.sh 192.168.2.96 master`
 
 ### Run
+Have a look to run.sh for a xomplete example. Below the steps.
+
 Create the named volumes:
 
 ```
@@ -75,7 +77,7 @@ docker start zm
 ### Letsencrypt
 To use the letsencrypt keys:
 * assuming that your letsencrypt keys (fullchain.pem and cert.key) are stored in a named folder 'letsencrypt_volume', mount it into the docker with: `-v letsencrypt_volume:"/letsencrypt":ro`
-* assign your domain name (ex. arturol76.net) to the environment LETSENCRYPT_DOMAIN variable: `-e LETSENCRYPT_DOMAIN="arturol76.net"`
+* assign your domain name (ex. xyz.com) to the environment LETSENCRYPT_DOMAIN variable: `-e LETSENCRYPT_DOMAIN="yourdomain"`
 
 Once started, the container will copy keys from letsecnrypt volume into the container as follows:
 
