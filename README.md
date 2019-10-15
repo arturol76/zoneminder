@@ -77,7 +77,7 @@ docker start zm
 ### Letsencrypt
 To use the letsencrypt keys:
 * assuming that your letsencrypt keys (fullchain.pem and cert.key) are stored in a named folder 'letsencrypt_volume', mount it into the docker with: `-v letsencrypt_volume:"/letsencrypt":ro`
-* assign your domain name (ex. xyz.com) to the environment LETSENCRYPT_DOMAIN variable: `-e LETSENCRYPT_DOMAIN="yourdomain"`
+* assign your domain name (ex. xyz.com) to the environment LETSENCRYPT_DOMAIN variable: `-e LETSENCRYPT_DOMAIN="xyz.com"`
 
 Once started, the container will copy keys from letsecnrypt volume into the container as follows:
 
