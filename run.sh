@@ -105,13 +105,6 @@ copy_config()
         docker -H $docker_host cp ./conf/zmeventnotification/objectconfig.ini $container_name:/config/hook/objectconfig.ini
         docker -H $docker_host cp ./conf/known_faces/. $container_name:/config/hook/known_faces
         docker -H $docker_host cp ./conf/init/. $container_name:/etc/my_init.d
-        
-        #NOTE: 1st run will
-        #cp -r /config/hook/models /var/lib/zmeventnotification/models
-        #cp -p /config/hook/objectconfig.ini /etc/zm/ 2>/dev/null
-        #cp /config/zmeventnotification.ini /etc/zm/
-        #cp -r /config/hook/known_faces /var/lib/zmeventnotification/known_faces
-        #cp -p /config/hook/detect* /usr/bin/ 2>/dev/null
     else
         echo
     fi
