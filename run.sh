@@ -72,7 +72,7 @@ create()
         -e SHMEM="50%" \
         -e PUID="99" \
         -e PGID="100" \
-        -e LETSENCRYPT_DOMAIN="arturol76.net" \
+        -e LETSENCRYPT_DOMAIN="xyz.com" \
         -v ${container_name}_config:"/config":rw \
         -v ${container_name}_data:"/var/cache/zoneminder":rw \
         -v ${container_name}_ssh:"/root/.ssh":rw \
