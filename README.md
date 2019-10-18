@@ -1,8 +1,8 @@
 ## Zoneminder Docker
 Current version: 
-* base image: phusion 0.10.2
-* zone minder: 1.33.14
-* zmeventnotification server: 4.4.7
+* base image: phusion 0.11 (ubuntu 18.04)
+* zone minder: 1.30, 1.32 or master (via build ARG)
+* zmeventnotification server: latest available at build time
 * PHP version: 7.1
 
 ### About

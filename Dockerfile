@@ -1,4 +1,4 @@
-FROM arturol76/phusion-baseimage
+FROM arturol76/phusion-baseimage:0.11
 LABEL maintainer="arturol76"
 
 ENV	DEBCONF_NONINTERACTIVE_SEEN="true" \
@@ -34,7 +34,9 @@ RUN	add-apt-repository -y ppa:iconnor/zoneminder-$ZM_VERS && \
 	apt-get update && \
 	apt-get -y install apache2 mariadb-server
 
-RUN apt-get -y install libav-tools
+RUN	add-apt-repository ppa:jonathonf/ffmpeg-4 \
+	&& apt-get update \
+	&& apt-get -y install ffmpeg
 
 RUN	apt-get -y install ssmtp mailutils net-tools  wget sudo make && \
 	apt-get -y install php$PHP_VERS php$PHP_VERS-fpm libapache2-mod-php$PHP_VERS php$PHP_VERS-mysql php$PHP_VERS-gd && \
