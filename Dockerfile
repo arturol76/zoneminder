@@ -16,7 +16,7 @@ ENV	PHP_VERS="7.1"
 ARG ZM_VERS="master"
 ENV	ZM_VERS="${ZM_VERS}"
 
-ENV	ZMEVENT_VERS="4.2"
+ENV	ZMEVENT_VERS="4.6"
 
 ENV	SHMEM="50%" \
 	PUID="99" \
@@ -86,11 +86,13 @@ RUN	mv /root/zoneminder /etc/init.d/zoneminder && \
 	service apache2 restart && \
 	service zoneminder start
 
-# Install ZMES
+# Install ZMES (latest stable release)
 RUN apt-get install -y git python3-pip \
 	&& pip3 install future \
 	&& git clone https://github.com/pliablepixels/zmeventnotification.git /tmp/zmevent \
 	&& cd /tmp/zmevent \
+	&& git fetch --tags \
+	&& git checkout $(git describe --tags $(git rev-list --tags --max-count=1)) \
 	&& ./install.sh --no-interactive --install-es --install-hook --install-config \
 	&& mkdir -p /var/lib/zmeventnotification/images \
 	&& chown -R www-data:www-data /var/lib/zmeventnotification/
