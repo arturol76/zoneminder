@@ -5,7 +5,7 @@ show_help()
     echo USAGE:
     echo ./build.sh docker_host image_name zm_version
     echo    -docker_host: ip of docker host [127.0.0.1 or others]
-    echo    -zm_version: 1.30, 1.32, master
+    echo    -zm_version: 1.30, 1.32, 1.34, master
     echo
     echo example:
     echo    ./build.sh 192.168.2.96 master
@@ -43,6 +43,7 @@ tag=${tag:-$default_tag}
 
 echo building image "$repo/$image:$tag"...
 docker -H $docker_host build --no-cache -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
+#docker -H $docker_host build -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
 
 read -p "Do you want to push image to docker repository? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -55,7 +56,7 @@ then
     read -p "Do you want to tag it also with 'latest'? " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]; then 
         echo pushing to $repo/$image:latest...
-        docker -H $docker_host push $repo/$image:latest
+        docker -H $docker_host tag $repo/$image:$tag $repo/$image:latest
     else echo; fi
   
 else

@@ -88,7 +88,7 @@ RUN	mv /root/zoneminder /etc/init.d/zoneminder && \
 
 # Install ZMES (latest stable release)
 RUN apt-get install -y git python3-pip \
-	&& pip3 install future \
+	&& pip3 install future opencv-python \
 	&& git clone https://github.com/pliablepixels/zmeventnotification.git /tmp/zmevent \
 	&& cd /tmp/zmevent \
 	&& git fetch --tags \
