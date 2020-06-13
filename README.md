@@ -1,3 +1,6 @@
+[![](https://img.shields.io/docker/pulls/arturol76/zoneminder)](https://hub.docker.com/r/arturol76/zoneminder)
+[![](https://img.shields.io/docker/image-size/arturol76/zoneminder)](https://hub.docker.com/r/arturol76/zoneminder)
+
 ## Zoneminder Docker
 Current version: 
 * base image: phusion 0.11 (ubuntu 18.04)
@@ -7,7 +10,7 @@ Current version:
 
 ### About
 A fork from dlandon/zoneminder with some changes:
-* use arturol76/phusion-baseimage (phusion 0.10.2 with SSH enabled) instead of dlandon/baseimage
+* use arturol76/phusion-baseimage (phusion 0.11 with SSH enabled) instead of dlandon/baseimage
 * zoneminder version is chosen at build time via ARG (look at build.sh)
 * zmeventnotification server (ZMES) and yolo/tiny_yolo models are installed via ZMES install.sh script and embedded into the image (for super-fast startup of container)
 * face recognition embedded into the image (for super-fast startup of container)
