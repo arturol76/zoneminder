@@ -8,14 +8,14 @@ show_help()
     echo    -zm_version: 1.30, 1.32, 1.34, master
     echo
     echo example:
-    echo    ./build.sh 192.168.2.96 master
+    echo    ./build.sh 192.168.2.96 1.34
     echo ------------------------------------------------------
     echo
 }
 
 num_of_params=2
 docker_host=$1
-container_name=$2
+zm_version=$2
 
 #checks number of parameters
 if [ "$#" -ne $num_of_params ]; then
@@ -42,7 +42,7 @@ read -p "which tag? [$default_tag]: " tag
 tag=${tag:-$default_tag}
 
 echo building image "$repo/$image:$tag"...
-docker -H $docker_host build --no-cache -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
+docker -H $docker_host build -t $repo/$image:$tag --no-cache --build-arg ZM_VERS=$zm_version .
 #docker -H $docker_host build -t $repo/$image:$tag --build-arg ZM_VERS=$2 .
 
 read -p "Do you want to push image to docker repository? " -n 1 -r

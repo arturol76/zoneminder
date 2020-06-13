@@ -23,7 +23,7 @@ A fork from dlandon/zoneminder with some changes:
 * zm_version: zoneminder version. Valid values: 1.30, 1.32, master
 
 example:
-`./build.sh 192.168.2.96 master`
+`./build.sh 192.168.2.96 1.34`
 
 ### Run
 Have a look to run.sh for a xomplete example. Below the steps.

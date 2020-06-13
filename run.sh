@@ -10,7 +10,6 @@ show_help()
     echo ./run.sh docker_ip container_name docker_image port_https port_zmes port_ssh
     echo
     echo EXAMPLE:
-    echo ./run.sh 192.168.2.96 zm3 arturol76/zoneminder:latest 2443 2900 2022
     echo ./run.sh 192.168.2.96 zm2 arturol76/zoneminder:latest 3443 3900 3022
     echo ------------------------------------------------------------------
     echo
@@ -74,12 +73,14 @@ create()
         -e PGID="100" \
         -e LETSENCRYPT_DOMAIN="xyz.com" \
         -v ${container_name}_config:"/config":rw \
-        -v ${container_name}_data:"/var/cache/zoneminder":rw \
+        -v /mnt/sda/zoneminder/data:"/var/cache/zoneminder":rw \
         -v ${container_name}_ssh:"/root/.ssh":rw \
         -v letsencrypt-dns_etc:"/letsencrypt":ro \
         --name $container_name \
         $docker_image
 }
+
+#-v ${container_name}_data:"/var/cache/zoneminder":rw \
 
 # start container
 start()
