@@ -1,8 +1,10 @@
 FROM arturol76/phusion-baseimage:0.11
+#FROM phusion/baseimage:bionic-1.0.0
 LABEL maintainer="arturol76"
 
 ENV	DEBCONF_NONINTERACTIVE_SEEN="true" \
 	DEBIAN_FRONTEND="noninteractive" \
+	DISABLE_SSH="true" \
 	HOME="/root" \
 	LC_ALL="C.UTF-8" \
 	LANG="en_US.UTF-8" \
@@ -10,13 +12,11 @@ ENV	DEBCONF_NONINTERACTIVE_SEEN="true" \
 	TZ="Etc/UTC" \
 	TERM="xterm"
 
-ENV	PHP_VERS="7.1"
+ENV	PHP_VERS="7.4"
 
 #valid values: 1.30, 1.32, master
 ARG ZM_VERS="master"
 ENV	ZM_VERS="${ZM_VERS}"
-
-ENV	ZMEVENT_VERS="4.6"
 
 ENV	SHMEM="50%" \
 	PUID="99" \
@@ -61,8 +61,8 @@ RUN	rm /etc/mysql/my.cnf && \
 	perl -MCPAN -e "force install Net::MQTT::Simple::Auth"
 
 RUN	cd /root && \
-	wget www.andywilcock.com/code/cambozola/cambozola-latest.tar.gz && \
-	tar xvf cambozola-latest.tar.gz && \
+	wget https://src.fedoraproject.org/lookaside/pkgs/cambozola/cambozola-latest.tar.gz/c4896a99702af61eead945ed58b5667b/cambozola-latest.tar.gz && \
+    tar xvf cambozola-latest.tar.gz && \
 	cp cambozola*/dist/cambozola.jar /usr/share/zoneminder/www && \
 	rm -rf cambozola*/ && \
 	rm -rf cambozola-latest.tar.gz && \
@@ -88,8 +88,10 @@ RUN	mv /root/zoneminder /etc/init.d/zoneminder && \
 
 # Install ZMES (latest stable release)
 RUN apt-get install -y git python3-pip \
-	&& pip3 install future opencv-python \
-	&& git clone https://github.com/pliablepixels/zmeventnotification.git /tmp/zmevent \
+	&& python3 -m pip install --upgrade pip \
+	&& pip3 install future opencv-python
+
+RUN git clone https://github.com/pliablepixels/zmeventnotification.git /tmp/zmevent \
 	&& cd /tmp/zmevent \
 	&& git fetch --tags \
 	&& git checkout $(git describe --tags $(git rev-list --tags --max-count=1)) \
@@ -107,10 +109,6 @@ RUN	systemd-tmpfiles --create zoneminder.conf && \
 	echo "#!/bin/sh\n\n/usr/bin/zmaudit.pl -f" >> /etc/cron.weekly/zmaudit && \
 	chmod +x /etc/cron.weekly/zmaudit
 	
-# Install for face recognition
-RUN apt-get -y install libopenblas-dev liblapack-dev libblas-dev cmake \
- 	&& pip3 install face_recognition
-
 RUN	apt-get -y remove make && \
 	apt-get -y clean && \
 	apt-get -y autoremove && \
