@@ -1,5 +1,6 @@
 [![](https://img.shields.io/docker/pulls/arturol76/zoneminder)](https://hub.docker.com/r/arturol76/zoneminder)
 [![](https://img.shields.io/docker/image-size/arturol76/zoneminder)](https://hub.docker.com/r/arturol76/zoneminder)
+[![](https://img.shields.io/docker/v/arturol76/zoneminder/v10)](https://img.shields.io/docker/v/arturol76/zoneminder/v10)
 
 ## Zoneminder Docker
 Current version: 
